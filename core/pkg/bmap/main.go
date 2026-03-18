@@ -13,7 +13,7 @@ type (
 		CreatedAt int64
 		Bytes,
 		// 转换后的数据
-		G711AEncodeBytes []byte
+		ConvBytes []byte
 	}
 
 	BufferManager struct {
@@ -63,15 +63,30 @@ func (bm *BufferManager) Set(key string, data *Item) {
 func (bm *BufferManager) Get(key string) *Item {
 	bm.mu.RLock()
 	item, exists := bm.items[key]
+	if !exists || item.Data.Len() == 0 {
+		bm.mu.RUnlock()
+		return nil
+	}
+
+	// 已经生成过 Bytes 副本，直接返回
+	if item.Bytes != nil {
+		bm.mu.RUnlock()
+		return item
+	}
 	bm.mu.RUnlock()
 
+	// 需要生成 Bytes 副本，使用写锁保证并发安全
+	bm.mu.Lock()
+	defer bm.mu.Unlock()
+
+	// 可能在获取写锁期间已有其他协程生成了 Bytes，这里再检查一次
+	item, exists = bm.items[key]
 	if !exists || item.Data.Len() == 0 {
 		return nil
 	}
 
-	// 懒加载 只在第一次请求时生成Bytes副本
 	if item.Bytes == nil {
-		data := item.Data.Bytes()
+		var data = item.Data.Bytes()
 		item.Bytes = make([]byte, len(data))
 		copy(item.Bytes, data)
 	}
@@ -140,9 +155,14 @@ func (bm *BufferManager) Size() int {
 
 func (bm *BufferManager) Range(callback func(key string, item *Item)) {
 	bm.mu.RLock()
-	defer bm.mu.RUnlock()
-
+	// 先拷贝一份快照，避免在回调中再次调用 BufferManager 导致死锁
+	var snapshot = make(map[string]*Item, len(bm.items))
 	for key, item := range bm.items {
+		snapshot[key] = item
+	}
+	bm.mu.RUnlock()
+
+	for key, item := range snapshot {
 		callback(key, item)
 	}
 }
