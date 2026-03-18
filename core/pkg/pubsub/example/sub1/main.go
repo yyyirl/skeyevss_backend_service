@@ -21,7 +21,7 @@ var num = 0
 
 func main() {
 	// config
-	const node = "192.168.0.1"
+	const node = "192.168.50.1"
 
 	go pubsub.NewRedis(
 		context.Background(),

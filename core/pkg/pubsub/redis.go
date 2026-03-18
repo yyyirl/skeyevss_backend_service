@@ -10,6 +10,7 @@ import (
 	"context"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -37,18 +38,22 @@ type ps struct {
 	Ctx context.Context
 	// conf
 	conf *Conf
+	// 关闭只执行一次
+	closeOnce sync.Once
 	// 发布的消息
 	Message chan redisPublishMessageChanType
 	// 消息列表
 	Messages sync.Map
+	// 各个channel的最近发送时间戳
+	SendTimestamps sync.Map
 	// 即将发布的消息
 	PublishMessages chan *redisMessageChanType
 	// 退出信号
 	ExitSignal chan error
 	// 是否已结束队列
 	IsClosed bool
-	// 发送时间 单位/毫秒
-	sendTimestamp int64
+	// 内部并发关闭标记
+	closed int32
 }
 
 // 单机
@@ -108,9 +113,20 @@ func newPs(ctx context.Context, conf *Conf) *ps {
 	}
 }
 
+// 是否已关闭
+func (r *RedisClient) isClosed() bool {
+	return atomic.LoadInt32(&r.closed) == 1
+}
+
+// 标记为已关闭
+func (r *RedisClient) markClosed() {
+	r.IsClosed = true
+	atomic.StoreInt32(&r.closed, 1)
+}
+
 // 推送消息
 func (r *RedisClient) Send(channel string, message []byte) {
-	if r.IsClosed {
+	if r.isClosed() {
 		return
 	}
 
@@ -131,6 +147,30 @@ func (r *RedisClient) Subscribe(channel string, completion func(messages RedisPu
 		_ = ps.Close()
 	}()
 
+	const (
+		workerCount = 10
+		bufferSize  = 100
+	)
+
+	var (
+		msgCh = make(chan RedisPublishMessageType, bufferSize)
+		wg    sync.WaitGroup
+	)
+	for i := 0; i < workerCount; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for item := range msgCh {
+				completion(item)
+			}
+		}()
+	}
+
+	defer func() {
+		close(msgCh)
+		wg.Wait()
+	}()
+
 	for item := range ps.Channel() {
 		if item.Payload == "" {
 			continue
@@ -142,7 +182,7 @@ func (r *RedisClient) Subscribe(channel string, completion func(messages RedisPu
 			continue
 		}
 
-		go completion(list)
+		msgCh <- list
 	}
 }
 
@@ -162,7 +202,7 @@ func (r *RedisClient) queueProc() {
 			return
 
 		case val := <-r.Message: // 接收消息
-			if r.IsClosed {
+			if r.isClosed() {
 				return
 			}
 
@@ -170,26 +210,38 @@ func (r *RedisClient) queueProc() {
 				continue
 			}
 
-			var now = functions.NewTimer().NowMilli()
-			if r.sendTimestamp <= 0 {
-				r.sendTimestamp = now
-			}
-
 			// 消息组
-			var messageList = make(redisMessages, 0, maxMessageCount)
-			list, ok := r.Messages.Load(val.channel)
-			if ok && list != nil {
-				if messageList, ok = list.(redisMessages); !ok {
-					messageList = nil
-					// panic(fmt.Sprintf("类型错误 %T", list))
+			var (
+				now         = functions.NewTimer().NowMilli()
+				messageList redisMessages
+			)
+			if list, ok := r.Messages.Load(val.channel); ok && list != nil {
+				if ml, ok := list.(redisMessages); ok {
+					messageList = ml
 				}
 			}
 
+			if messageList == nil {
+				messageList = make(redisMessages, 0, r.conf.MaxMessageCount)
+			}
+
+			var lastSend int64
+			if ts, ok := r.SendTimestamps.Load(val.channel); ok {
+				if v, ok := ts.(int64); ok {
+					lastSend = v
+				}
+			}
+
+			if lastSend == 0 {
+				lastSend = now
+			}
+
 			// 队列数据满了 || 超出指定时间未发送
-			if len(messageList) >= maxMessageCount || now-r.sendTimestamp >= sendInterval {
+			if len(messageList) >= r.conf.MaxMessageCount || now-lastSend >= int64(r.conf.SendInterval) {
 				// 订阅消息
 				r.PublishMessages <- &redisMessageChanType{val.channel, messageList}
-				r.sendTimestamp = now
+				r.SendTimestamps.Store(val.channel, now)
+				r.Messages.Store(val.channel, redisMessages(nil))
 				messageList = nil
 			}
 
@@ -216,19 +268,41 @@ func (r *RedisClient) queueProc() {
 
 // 心跳检测清空剩余数据
 func (r *RedisClient) heartbeatProc() {
-	for range time.NewTicker(time.Millisecond * heartbeatInterval).C {
-		if r.IsClosed {
-			return
-		}
+	var ticker = time.NewTicker(time.Millisecond * time.Duration(r.conf.HeartbeatInterval))
+	defer ticker.Stop()
 
-		r.Messages.Range(func(key, _ any) bool {
-			if r.IsClosed {
-				return false
+	for {
+		select {
+		case <-r.Ctx.Done():
+			return
+		case <-ticker.C:
+			if r.isClosed() {
+				return
 			}
 
-			r.Message <- redisPublishMessageChanType{channel: key.(string)}
-			return true
-		})
+			var now = functions.NewTimer().NowMilli()
+			r.Messages.Range(func(key, value any) bool {
+				if r.isClosed() {
+					return false
+				}
+
+				channel, ok := key.(string)
+				if !ok {
+					return true
+				}
+
+				messageList, ok := value.(redisMessages)
+				if !ok || len(messageList) == 0 {
+					return true
+				}
+
+				r.PublishMessages <- &redisMessageChanType{channel: channel, messages: messageList}
+				r.SendTimestamps.Store(channel, now)
+				r.Messages.Store(channel, redisMessages(nil))
+
+				return true
+			})
+		}
 	}
 }
 
@@ -240,7 +314,7 @@ func (r *RedisClient) publishProc() {
 			return
 
 		case data := <-r.PublishMessages: // 接收消息
-			if r.IsClosed {
+			if r.isClosed() {
 				return
 			}
 
@@ -269,7 +343,7 @@ func (r *RedisClient) publishProc() {
 
 			// 发布订阅
 			if _, err := r.publish(data.channel, message).Result(); err != nil {
-				if r.IsClosed {
+				if r.isClosed() {
 					return
 				}
 
@@ -300,10 +374,12 @@ func (r *RedisClient) subscribe(channel string) *redis.PubSub {
 
 // 心跳检测清空剩余数据
 func (r *RedisClient) close() {
-	r.IsClosed = true
-	close(r.Message)
-	close(r.PublishMessages)
-	close(r.ExitSignal)
+	r.closeOnce.Do(func() {
+		r.markClosed()
+		close(r.Message)
+		close(r.PublishMessages)
+		close(r.ExitSignal)
+	})
 }
 
 // 发送邮件
