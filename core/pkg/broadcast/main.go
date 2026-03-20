@@ -1,5 +1,5 @@
-// @Title        main
-// @Description  main
+// @Title        事件广播
+// @Description  事件广播
 // @Create       yiyiyi 2025/9/8 16:50
 
 package broadcast

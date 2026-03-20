@@ -23,7 +23,7 @@ func deviceDepIdSet() {
 	for {
 		select {
 		case <-svcCtx.DeviceDepIdSetChan:
-			dt.Throttled("deviceDepIdSet", 2*time.Second, func() {
+			dt.TrailingDebounce("deviceDepIdSet", 2*time.Second, func() {
 				doSetDeviceDepId()
 			})
 		}

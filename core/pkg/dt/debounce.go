@@ -1,6 +1,6 @@
 /**
  * @Author:         yi
- * @Description:    debounce-throttle
+ * @Description:    防抖
  * @Version:        1.0.0
  * @Date:           2025/2/11 17:00
  */
@@ -14,31 +14,30 @@ import (
 
 var debounceMaps = cmap.New()
 
-// 定时任务模拟防抖函数
+// Debounce 每次调用都会将执行时刻推迟到「当前时刻 + interval」；仅在持续 interval 无新调用时，由后台 ticker 触发一次 call。
 func Debounce(uniqueId string, interval time.Duration, call func()) {
 	if uniqueId == "" || call == nil || interval <= 0 {
 		return
 	}
 
-	var item = &debounceType{
+	debounceMaps.Set(uniqueId, &debounceType{
 		Call:     call,
 		ExecTime: time.Now().UnixMilli() + interval.Milliseconds(),
-	}
-	if cache, ok := debounceMaps.Get(uniqueId); ok {
-		if v, ok := cache.(*debounceType); ok {
-			item.ExecTime = v.ExecTime
-		}
-	}
-
-	debounceMaps.Set(uniqueId, item)
+	})
 }
 
 func debounceRunner() {
-	for val := range time.NewTicker(time.Millisecond * 10).C {
+	var ticker = time.NewTicker(time.Millisecond * 10)
+	for t := range ticker.C {
 		for uniqueId, item := range debounceMaps.Items() {
-			var current = item.(*debounceType)
-			if val.UnixMilli() >= current.ExecTime {
+			current, ok := item.(*debounceType)
+			if !ok {
+				continue
+			}
+
+			if t.UnixMilli() >= current.ExecTime {
 				go current.Call()
+
 				debounceMaps.Remove(uniqueId)
 			}
 		}

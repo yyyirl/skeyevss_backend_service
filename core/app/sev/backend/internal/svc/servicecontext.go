@@ -220,7 +220,7 @@ func (s *ServiceContext) auth() {
 	for {
 		select {
 		case <-s.AuthSet:
-			dt.Throttled(
+			dt.TrailingDebounce(
 				"fetchAuthRes",
 				500*time.Millisecond,
 				func() {
@@ -257,7 +257,7 @@ func (s *ServiceContext) dict() {
 	for {
 		select {
 		case <-s.DictSet:
-			dt.Throttled(
+			dt.TrailingDebounce(
 				"fetchDictRes",
 				2*time.Second,
 				func() {
@@ -309,7 +309,7 @@ func (s *ServiceContext) setting() {
 	for {
 		select {
 		case <-s.SettingSet:
-			dt.Throttled(
+			dt.TrailingDebounce(
 				"fetchSettingRes",
 				2*time.Second,
 				func() {
@@ -366,7 +366,7 @@ func (s *ServiceContext) ms() {
 	for {
 		select {
 		case <-s.MSSet:
-			dt.Throttled(
+			dt.TrailingDebounce(
 				"fetchMediaServerRecords",
 				2*time.Second,
 				func() {

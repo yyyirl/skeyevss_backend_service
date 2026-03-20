@@ -102,7 +102,7 @@ func setStreamState(ctx context.Context, c *gin.Context, svcCtx *types.ServiceCo
 	// 实时流保活
 	if path == VOnSubStartLogic.Path() {
 		// 获取通道信息
-		dt.Throttled(
+		dt.TrailingDebounce(
 			req.StreamName,
 			2*time.Second,
 			func() {
