@@ -10,6 +10,47 @@ import (
 	"time"
 )
 
+func TestThrottleFixedGridTrailing_ScaledThreeSlots(t *testing.T) {
+	var (
+		period = 50 * time.Millisecond
+		count  int32
+		start  = time.Now()
+	)
+
+	for time.Since(start) < 102*time.Millisecond {
+		ThrottleFixedGridTrailing("grid-scale", period, func() {
+			atomic.AddInt32(&count, 1)
+		})
+	}
+
+	time.Sleep(200 * time.Millisecond)
+
+	if atomic.LoadInt32(&count) != 3 {
+		t.Fatalf("期望 102ms 内按 50ms 槽对齐共触发 3 次，实际 %d", count)
+	}
+}
+
+func TestThrottleFixedGridTrailing_LastInSlotWins(t *testing.T) {
+	var (
+		period = 80 * time.Millisecond
+		last   int32
+	)
+
+	for i := 0; i < 20; i++ {
+		var v = int32(i)
+
+		ThrottleFixedGridTrailing("g-last", period, func() {
+			atomic.StoreInt32(&last, v)
+		})
+	}
+
+	time.Sleep(period + 50*time.Millisecond)
+
+	if atomic.LoadInt32(&last) != 19 {
+		t.Fatalf("期望槽内保留最后一次回调的值 19，实际 %d", last)
+	}
+}
+
 func TestThrottled_OnlyLastWindowFires(t *testing.T) {
 	var count int32
 
