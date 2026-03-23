@@ -249,28 +249,7 @@ skeyevss/
 
 ## 七、构建与部署
 
-### 7.1 工具入口（core/app/tools）
-
-运行：
-
-```bash
-go run core/app/tools/main.go -f etc/.base.yaml -env .env.build.sev -index <序号>
-```
-
-可选序号：
-
-- 1：生成激活码
-- 2：构建服务（当前平台）
-- 3：获取本机序列号
-- 4：构建所有平台并上传（含基础依赖）
-- 5：构建所有平台并上传（不含基础依赖）
-- 6：构建所有平台并上传（基础依赖不含 MySQL）
-- 7：执行 4、5、6
-
-构建结果输出在 tmp/Skeyevss.*.zip。<br>
-**simplified**不包含基础依赖, **full** 包含所有服务依赖, **full-1** 基础依赖不包含mysql。
-
-### 7.2 Jenkins / 脚本构建
+### 7.1 Jenkins / 脚本构建
 
 - `scripts/jenkins/build.sh`：
     - `-d` / `--docker`：构建 Docker 镜像并推送到 Harbor。
