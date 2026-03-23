@@ -129,8 +129,6 @@ skeyevss/
 | DB RPC          | 11010                                             | etc/.db-rpc.yaml          | 数据管理 gRPC                     |
 | Backend API     | 11011                                             | etc/.backend-api.yaml     | 管理后台 REST                     |
 | Guard           | 11012                                             | etc/.guard.yaml           | 守护进程                          |
-| SK Backend API  | 11030                                             | etc/.sk-backend-api.yaml  | 官网后台                          |
-| SK Frontend API | 11031                                             | etc/.sk-frontend-api.yaml | 官网前台                          |
 
 ### 4.2 各服务职责简述
 
@@ -354,13 +352,6 @@ skeyevss/
 
 ### 9.1 开发前准备
 
-这是一个开发测试版本，如果需要完整版本请联系作者：
-
-- 1003275805@qq.com
-- 295222688@qq.com
-
-完整版本包含 `设备控制`、`预置位`、`录像`、`sms`等，功能更强大、更稳定，长期技术支持。
-
 - 开发环境
     1. 后端代码使用`Go`语言开发，需要配置**go**语言开发环境 go版本 >= 1.23.10 [https://go.dev](https://go.dev)
     2. 前端代码使用`React(18.2.0)` `Typescript`，需要配置`node`开发环境 [https://nodejs.org](https://nodejs.org/zh-cn)
@@ -475,3 +466,8 @@ skeyevss/
 3. **etcd 连接失败**：确认 etcd 已启动，且 `SKEYEVSS_ETCD_HOST`、`SKEYEVSS_ETCD_CLIENT_PORT` 正确。
 4. **VSS 无法拉流**：确认媒体服务已启动，且 VSS 配置的媒体 HTTP 地址可访问；防火墙放行 SIP/RTP 端口。
 5. **Guard 需管理员权限**：Windows/Linux 上以管理员运行，否则可能无法启动子进程或绑定端口。
+
+## 十二、联系我们
+
+- 技术交流QQ群：102644504
+
