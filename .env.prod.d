@@ -346,7 +346,7 @@ SKEYEVSS_SEV_RES_ETC_ASSET=skeyevss-sev/sev/etc
 SKEYEVSS_SEV_RES_ASSET_SCRIPTS_DIR=skeyevss-sev/scripts
 
 # 数据目录
-SKEYEVSS_SEV_RES_ASSET_CERT_DIR=skeyevss-sev/cert
+SKEYEVSS_SEV_RES_ASSET_CERT_DIR=
 SKEYEVSS_SEV_RES_ASSET_DATA_DIR=skeyevss-sev/data
 SKEYEVSS_SEV_RES_ASSET_DATA_LOG=skeyevss-sev/logs
 SKEYEVSS_SEV_RES_MYSQL_DATA=skeyevss-sev/data/mysql

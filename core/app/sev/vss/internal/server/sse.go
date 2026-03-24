@@ -37,8 +37,12 @@ func (l *SSWSev) handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
+	var buf = l.svcCtx.Config.SSE.MessageChanBuffer
+	if buf <= 0 {
+		buf = 256
+	}
 	var (
-		messageChan = make(chan *types.SSEResponse, 10)
+		messageChan = make(chan *types.SSEResponse, buf)
 		afterClose  = false
 	)
 	defer func() {

@@ -61,6 +61,10 @@ Http:
 
 SSE:
     Port: ${SKEYEVSS_VSS_SSE_PORT}
+    # SSE 每连接缓冲（条），SIP 日志洪峰时建议 256～1024；不配则默认 256
+    MessageChanBuffer: 512
+    # sip_logs 每秒最多推送条数（0=不限）与缓冲满丢弃配合防拖垮浏览器
+    SipLogMaxPerSecond: 200
 
 WS:
     Port: ${SKEYEVSS_VSS_WS_PORT}

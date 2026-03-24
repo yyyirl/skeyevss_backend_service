@@ -148,6 +148,10 @@ type VssSevConfig struct {
 	}
 	SSE struct {
 		Port int
+		// MessageChanBuffer 每个 SSE 连接 messageChan 缓冲长度，缓解 SIP 日志等洪峰 0 表示使用服务端默认（256）
+		MessageChanBuffer int `json:",optional"`
+		// SipLogMaxPerSecond 单路 sip_logs 连接每秒最多推送的日志条数（收发合计），0 表示不限制仍受缓冲满丢弃策略影响
+		SipLogMaxPerSecond int `json:",optional"`
 	}
 
 	XAuth tps.YamlAuth
