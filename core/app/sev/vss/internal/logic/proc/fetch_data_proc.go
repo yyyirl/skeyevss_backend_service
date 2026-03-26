@@ -372,6 +372,6 @@ func (l *FetchDataLogic) deviceOnlineState() {
 	}
 
 	if res.Data != nil {
-		l.svcCtx.DeviceInlineState = res.Data
+		l.svcCtx.DeviceOnlineState = res.Data
 	}
 }

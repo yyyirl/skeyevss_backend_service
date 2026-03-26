@@ -288,7 +288,7 @@ type (
 		CascadeRegisterExecuting *xmap.XMap[string, bool]
 
 		// 所有 设备/通道 在线状态
-		DeviceInlineState *cTypes.DeviceOnlineStateResp
+		DeviceOnlineState *cTypes.DeviceOnlineStateResp
 
 		// 初始化数据加载完成状态
 		InitFetchDataState sync.WaitGroup

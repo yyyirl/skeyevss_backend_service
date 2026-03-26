@@ -65,7 +65,7 @@ func (l *DeviceOnlineStateLogic) DO(req *SSEDeviceOnlineStatesReq) {
 }
 
 func (l *DeviceOnlineStateLogic) do(req *SSEDeviceOnlineStatesReq) {
-	if l.svcCtx.DeviceInlineState == nil {
+	if l.svcCtx.DeviceOnlineState == nil {
 		l.messageChan <- &types.SSEResponse{
 			Err:        response.MakeError(response.NewHttpRespMessage().Str("设备在线状态获取失败, deviceInlineState 为空"), localization.M0010),
 			DelayClose: true,
@@ -75,12 +75,12 @@ func (l *DeviceOnlineStateLogic) do(req *SSEDeviceOnlineStatesReq) {
 
 	if req.DeviceType == 1 {
 		l.messageChan <- &types.SSEResponse{
-			Data: l.svcCtx.DeviceInlineState.Devices,
+			Data: l.svcCtx.DeviceOnlineState.Devices,
 		}
 		return
 	}
 
 	l.messageChan <- &types.SSEResponse{
-		Data: l.svcCtx.DeviceInlineState.Channels,
+		Data: l.svcCtx.DeviceOnlineState.Channels,
 	}
 }
