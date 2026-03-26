@@ -427,15 +427,6 @@ skeyevss/
 - **Backend ServiceContext 包级变量**：`servicecontext.go` 中 `healthCache`、`settingRow`、`authRes`、`dictRes`、`msRes` 等为
   package-level 全局变量，被多个 goroutine 读写（health、auth、dict、setting、ms、deviceStatistics）。依赖 channel，逻辑相对分散，后期有待优化。
 
-### 10.7 配置复杂度与一致性
-
-- **.env 体量大**：`.env.local.default`容易漏改或改错。
-- **yaml 与 env 强绑定**：yaml 中大量占位符依赖 env，若某 key 未导出或拼写错误，表现可能是空字符串或异常值。
-
-### 10.8 基础框架版本兼容
-
-- go-zero版本较低，很多框架特性与新功能需要更新框架，开发测试成本较高
-
 ---
 
 ## 十一、常见问题
