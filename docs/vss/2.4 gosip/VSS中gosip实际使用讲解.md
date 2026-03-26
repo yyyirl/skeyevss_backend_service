@@ -4,6 +4,7 @@
 
 参考代码 [点击直达](https://github.com/yyyirl/go-vss/blob/main/core/app/sev/vss)
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
 
 为便于落地，下面会用 `INVITE` 贯穿两条典型链路：
 

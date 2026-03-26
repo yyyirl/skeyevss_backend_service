@@ -6,6 +6,8 @@
 
 项目地址：[`ghettovoice/gosip`](https://github.com/ghettovoice/gosip)
 
+**vss项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ---
 
 ## 1. 总体架构：Server 分层编排 + 传输/事务/消息解耦
