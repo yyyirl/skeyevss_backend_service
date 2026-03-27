@@ -2,6 +2,8 @@
 
 参考代码 [点击直达](https://github.com/openskeye/go-vss/blob/main/core/pkg/gatekeeper)
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ## 一、背景与需求
 
 在微服务架构中，很多场景需要一种"门卫"机制来保护后端服务：

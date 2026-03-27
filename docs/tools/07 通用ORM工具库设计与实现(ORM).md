@@ -11,6 +11,8 @@
 
 参考代码 [点击直达](https://github.com/openskeye/go-vss/tree/main/core/pkg/orm)
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ---
 
 ## 一、整体架构与设计理念

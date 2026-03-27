@@ -2,6 +2,8 @@
 
 本文介绍 **`core/pkg/functions/download`** 中 **`DownloadManager`** 的职责划分、关键数据结构、这样设计的原因，以及 **优劣势**；最后说明在 **VSS SSE（`type=file_download`）** 场景下的端到端流程。
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ---
 
 ## 一、组件定位

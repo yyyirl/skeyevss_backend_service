@@ -2,6 +2,8 @@
 
 [//]: # (源码文件: core/pkg/categories/main.go)
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 > 一篇关于如何设计和实现一个泛型、高性能、易用的分类树处理工具库的完整技术分享
 
 ## 本文目录

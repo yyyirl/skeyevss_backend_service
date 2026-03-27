@@ -6,6 +6,8 @@
 参考代码：  
 `https://github.com/openskeye/go-vss/blob/main/core/pkg/pubsub`
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ---
 
 ## 一、背景与需求

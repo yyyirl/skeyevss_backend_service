@@ -4,6 +4,8 @@
 
 参考代码 [点击直达](https://github.com/openskeye/go-vss/blob/main/core/pkg/broadcast/main.go)
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ## 背景与需求
 
 在许多应用场景中，我们需要实现一对多的消息分发机制：

@@ -2,6 +2,8 @@
 
 参考代码 [点击直达](https://github.com/openskeye/go-vss/blob/main/core/pkg/xmap)
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ## 简介
 
 `xmap` 是一个基于Go泛型实现的线程安全Map库，提供了丰富的操作方法，适用于并发场景下的键值对存储需求。通过读写锁(RWMutex)

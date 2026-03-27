@@ -1,5 +1,7 @@
 # 并发安全泛型集合（`core/pkg/set`）设计与实现
 
+**项目地址** [https://github.com/openskeye/go-vss](https://github.com/openskeye/go-vss)
+
 ## 1. 简介
 
 `set` 包提供 **`CSet[T comparable]`**：在 Go 泛型下实现的**线程安全集合**（元素不重复）。底层使用 **`map[T]struct{}`** 作为紧凑存储（空 struct 不占值内存），对外通过 **`sync.RWMutex`** 隔离并发读写。
