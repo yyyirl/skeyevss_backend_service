@@ -16,7 +16,7 @@ var (
 	ColumnUsername               = "username"
 	ColumnPassword               = "password"
 	ColumnStreamUrl              = "streamUrl"
-	ColumnChanelCount            = "chanelCount"
+	ColumnChannelCount           = "channelCount"
 	ColumnSmsIP                  = "smsIP"
 	ColumnClusterServerId        = "clusterServerId"
 	ColumnManufacturerId         = "manufacturerId"
@@ -50,7 +50,7 @@ var Columns = []string{
 	ColumnUsername,
 	ColumnPassword,
 	ColumnStreamUrl,
-	ColumnChanelCount,
+	ColumnChannelCount,
 	ColumnSmsIP,
 	ColumnClusterServerId,
 	ColumnManufacturerId,

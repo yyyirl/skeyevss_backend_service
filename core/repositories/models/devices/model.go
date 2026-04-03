@@ -34,7 +34,7 @@ type Devices struct {
 	Username        string `gorm:"column:username;type:varchar(50);default:'';NOT NULL;comment:'设备登录用户名'" json:"username"`
 	Password        string `gorm:"column:password;type:varchar(50);default:'';NOT NULL;comment:'设备登录密码'" json:"password"`
 	StreamUrl       string `gorm:"column:streamUrl;type:varchar(255);default:'';NOT NULL;COMMENT:'输入接入码流地址，流媒体源类型接入有效'" json:"streamUrl"`
-	ChanelCount     uint   `gorm:"column:chanelCount;type:int(11);default:0;NOT NULL;comment:'通道数量'" json:"chanelCount"`
+	ChannelCount    uint   `gorm:"column:channelCount;type:int(11);default:0;NOT NULL;comment:'通道数量'" json:"channelCount"`
 	SmsIP           string `gorm:"column:smsIP;type:varchar(50);default:'';NOT NULL;comment:'设备推流给指定的流媒体服务器IP，为空则采用全局配置本地流媒体'" json:"smsIP"`
 	ClusterServerId string `gorm:"column:clusterServerId;type:varchar(50);default:'';NOT NULL;comment:'集群服务器ID，预留'" json:"clusterServerId"`
 	ManufacturerId  uint64 `gorm:"column:manufacturerId;index:devices_manufacturerId;type:int(11);default:0;NOT NULL;comment:'设备/平台厂商 字典关联id'" json:"manufacturerId"`

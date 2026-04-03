@@ -436,7 +436,7 @@ func (l *CreateLogic) Create(req *types.RecordReq) (interface{}, *response.HttpE
 						{Column: devices.ColumnID, Value: id},
 					},
 					Data: []*orm.UpdateItem{
-						{Column: devices.ColumnChanelCount, Value: len(channelRecords)},
+						{Column: devices.ColumnChannelCount, Value: len(channelRecords)},
 					},
 				})
 				if err != nil {

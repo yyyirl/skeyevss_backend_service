@@ -5881,7 +5881,7 @@
         "x-apifox-folder": "后台/设备/设备管理",
         "x-apifox-status": "released",
         "deprecated": false,
-        "description": "## 设备详情响应数据结构\n\n| 字段名 | 字段注释 | 字段类型 | 示例值 |\n|--------|----------|----------|---------|\n| id | 设备ID | number | 1 |\n| name | 设备名称 | string | \"192.168.0.101:38227\" |\n| label | 设备标签 | string | \"\" |\n| accessProtocol | 接入协议 | number | 4 |\n| deviceUniqueId | 设备唯一ID | string | \"34020000001320000101\" |\n| originalDeviceUniqueId | 原始设备ID | string | \"\" |\n| state | 设备状态 | number | 1 |\n| online | 在线状态 | number | 1 |\n| expire | 过期时间 | number | 1762410778 |\n| sourceType | 源类型 | number | 0 |\n| address | 设备地址 | string | \"192.168.0.101:38227\" |\n| mediaTransMode | 媒体传输模式 | number | 1 |\n| username | 用户名 | string | \"\" |\n| password | 密码 | string | \"\" |\n| streamUrl | 流地址 | string | \"\" |\n| chanelCount | 通道数量 | number | 1 |\n| smsIP | SMS IP地址 | string | \"\" |\n| clusterServerId | 集群服务器ID | string | \"\" |\n| manufacturerId | 厂商ID | number | 2 |\n| modelVersion | 型号版本 | string | \"DS-2CD2686FWDV3-IZS V5.5.83\" |\n| subscription | 订阅信息 | string | \"0000\" |\n| offlineAt | 离线时间 | number | 1762407084047 |\n| onlineAt | 上线时间 | number | 0 |\n| keepaliveAt | 保活时间 | number | 1762407084047 |\n| registerAt | 注册时间 | number | 1762407178 |\n| createdAt | 创建时间 | number | 0 |\n| updatedAt | 更新时间 | number | 1762407100722 |\n| onvifManualOperationState | ONVIF手动操作状态 | boolean | false |\n| sub | 订阅配置 | object | {订阅对象} |\n| msIds | 媒体服务器ID列表 | array | [] |\n\n### sub 订阅配置\n| 字段名 | 字段注释 | 字段类型 | 示例值 |\n|--------|----------|----------|---------|\n| catalog | 目录订阅 | boolean | false |\n| emergencyCall | 紧急呼叫订阅 | boolean | false |\n| location | 位置订阅 | boolean | false |\n| ptz | 云台订阅 | boolean | false |\n\n---\n\n## 注解说明\n\n**设备基本信息：**\n- **accessProtocol**: 4 表示GB28181协议\n- **deviceUniqueId**: 符合GB/T 28181标准的20位设备编码\n- **state**: 1-启用，0-禁用\n- **online**: 1-在线，0-离线\n\n**协议相关配置：**\n- **mediaTransMode**: 1-TCP被动传输模式\n- **manufacturerId**: 2-海康威视设备\n- **modelVersion**: 设备具体型号和固件版本\n\n**时间信息：**\n- **expire**: 设备注册过期时间戳\n- **offlineAt/onlineAt**: 设备离线/上线时间\n- **keepaliveAt**: 最后保活时间\n- **registerAt**: 设备注册时间\n\n**订阅服务配置：**\n- **catalog**: 设备目录信息订阅\n- **emergencyCall**: 紧急呼叫事件订阅\n- **location**: 设备位置信息订阅\n- **ptz**: 云台控制能力订阅\n\n**网络配置：**\n- **address**: 设备网络地址和端口\n- **smsIP**: SIP消息服务器地址\n- **clusterServerId**: 集群服务标识\n\n**状态说明：**\n- **onvifManualOperationState**: ONVIF协议手动操作状态\n- **sourceType**: 设备源类型标识\n- **subscription**: 订阅状态编码",
+        "description": "## 设备详情响应数据结构\n\n| 字段名 | 字段注释 | 字段类型 | 示例值 |\n|--------|----------|----------|---------|\n| id | 设备ID | number | 1 |\n| name | 设备名称 | string | \"192.168.0.101:38227\" |\n| label | 设备标签 | string | \"\" |\n| accessProtocol | 接入协议 | number | 4 |\n| deviceUniqueId | 设备唯一ID | string | \"34020000001320000101\" |\n| originalDeviceUniqueId | 原始设备ID | string | \"\" |\n| state | 设备状态 | number | 1 |\n| online | 在线状态 | number | 1 |\n| expire | 过期时间 | number | 1762410778 |\n| sourceType | 源类型 | number | 0 |\n| address | 设备地址 | string | \"192.168.0.101:38227\" |\n| mediaTransMode | 媒体传输模式 | number | 1 |\n| username | 用户名 | string | \"\" |\n| password | 密码 | string | \"\" |\n| streamUrl | 流地址 | string | \"\" |\n| channelCount | 通道数量 | number | 1 |\n| smsIP | SMS IP地址 | string | \"\" |\n| clusterServerId | 集群服务器ID | string | \"\" |\n| manufacturerId | 厂商ID | number | 2 |\n| modelVersion | 型号版本 | string | \"DS-2CD2686FWDV3-IZS V5.5.83\" |\n| subscription | 订阅信息 | string | \"0000\" |\n| offlineAt | 离线时间 | number | 1762407084047 |\n| onlineAt | 上线时间 | number | 0 |\n| keepaliveAt | 保活时间 | number | 1762407084047 |\n| registerAt | 注册时间 | number | 1762407178 |\n| createdAt | 创建时间 | number | 0 |\n| updatedAt | 更新时间 | number | 1762407100722 |\n| onvifManualOperationState | ONVIF手动操作状态 | boolean | false |\n| sub | 订阅配置 | object | {订阅对象} |\n| msIds | 媒体服务器ID列表 | array | [] |\n\n### sub 订阅配置\n| 字段名 | 字段注释 | 字段类型 | 示例值 |\n|--------|----------|----------|---------|\n| catalog | 目录订阅 | boolean | false |\n| emergencyCall | 紧急呼叫订阅 | boolean | false |\n| location | 位置订阅 | boolean | false |\n| ptz | 云台订阅 | boolean | false |\n\n---\n\n## 注解说明\n\n**设备基本信息：**\n- **accessProtocol**: 4 表示GB28181协议\n- **deviceUniqueId**: 符合GB/T 28181标准的20位设备编码\n- **state**: 1-启用，0-禁用\n- **online**: 1-在线，0-离线\n\n**协议相关配置：**\n- **mediaTransMode**: 1-TCP被动传输模式\n- **manufacturerId**: 2-海康威视设备\n- **modelVersion**: 设备具体型号和固件版本\n\n**时间信息：**\n- **expire**: 设备注册过期时间戳\n- **offlineAt/onlineAt**: 设备离线/上线时间\n- **keepaliveAt**: 最后保活时间\n- **registerAt**: 设备注册时间\n\n**订阅服务配置：**\n- **catalog**: 设备目录信息订阅\n- **emergencyCall**: 紧急呼叫事件订阅\n- **location**: 设备位置信息订阅\n- **ptz**: 云台控制能力订阅\n\n**网络配置：**\n- **address**: 设备网络地址和端口\n- **smsIP**: SIP消息服务器地址\n- **clusterServerId**: 集群服务标识\n\n**状态说明：**\n- **onvifManualOperationState**: ONVIF协议手动操作状态\n- **sourceType**: 设备源类型标识\n- **subscription**: 订阅状态编码",
         "tags": [
           "后台/设备/设备管理"
         ],
@@ -5976,7 +5976,7 @@
                             "username": "",
                             "password": "",
                             "streamUrl": "",
-                            "chanelCount": 1,
+                            "channelCount": 1,
                             "smsIP": "",
                             "clusterServerId": "",
                             "manufacturerId": 2,
@@ -6013,7 +6013,7 @@
                             "username": "admin",
                             "password": "pass123456",
                             "streamUrl": "rtsp://admin:pass123456@192.168.0.101:554/h264/ch1/main/av_stream",
-                            "chanelCount": 1,
+                            "channelCount": 1,
                             "smsIP": "",
                             "clusterServerId": "",
                             "manufacturerId": 20,
@@ -11818,7 +11818,7 @@
                           "0xw100Ip": {
                             "accessProtocol": 1,
                             "address": "rtsp://192.168.0.101:554",
-                            "chanelCount": 1,
+                            "channelCount": 1,
                             "clusterServerId": "",
                             "createdAt": 1762321405417,
                             "deviceUniqueId": "0xw100Ip",
@@ -11857,7 +11857,7 @@
                           "34020000001320000101": {
                             "accessProtocol": 4,
                             "address": "192.168.0.101:38227",
-                            "chanelCount": 1,
+                            "channelCount": 1,
                             "clusterServerId": "",
                             "createdAt": 0,
                             "deviceUniqueId": "34020000001320000101",

@@ -215,7 +215,7 @@ func (l *CatLogLogic) DO() *types.Response {
 						{Column: devices.ColumnDeviceUniqueId, Value: data.DeviceID},
 					},
 					Data: []*orm.UpdateItem{
-						{Column: devices.ColumnChanelCount, Value: channelTotalRes.Data},
+						{Column: devices.ColumnChannelCount, Value: channelTotalRes.Data},
 					},
 				})
 				if err != nil {

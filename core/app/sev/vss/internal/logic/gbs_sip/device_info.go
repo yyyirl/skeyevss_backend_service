@@ -85,7 +85,7 @@ func (l *DeviceInfoLogic) DO() *types.Response {
 						Value:  fmt.Sprintf("%s %s", data.Model, data.Firmware),
 					},
 					{
-						Column: devices.ColumnChanelCount,
+						Column: devices.ColumnChannelCount,
 						Value:  data.Channel,
 					},
 				},
