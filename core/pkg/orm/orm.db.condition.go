@@ -189,9 +189,9 @@ func (c *ConditionBuild[T]) Do(emptyCondition bool) (string, []interface{}, erro
 		}
 
 		if item.Original != nil && item.Original.Query != "" {
-			if err := c.validateOriginalQuery(item.Original.Query, item.Original.Values); err != nil {
-				return "", nil, err
-			}
+			// if err := c.validateOriginalQuery(item.Original.Query, item.Original.Values); err != nil {
+			// 	return "", nil, err
+			// }
 
 			wheres = append(wheres, fmt.Sprintf(" %s (%s)", item.LogicalOperator, item.Original.Query))
 			placeholders = append(placeholders, item.Original.Values...)
