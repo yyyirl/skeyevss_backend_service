@@ -1,8 +1,7 @@
 import { RenderStyle } from '#types/ant.table.d'
-import { type OptionItem, type RowDataType } from '#types/base.d'
+import { type RowDataType } from '#types/base.d'
 import { type XFormItem, XFormItemType } from '#types/ant.form.d'
 import { type RowType } from '#components/table/model'
-import type { TreeItem } from '#repositories/types/foundation'
 
 export class Item implements RowDataType {
 	{{.Model}}
@@ -42,7 +41,7 @@ export class Item implements RowDataType {
 	}
 }
 
-export const columns = (departments: { [ key: number ]: TreeItem }): RowType<Item> => [
+export const columns = (): RowType<Item> => [
 	{
 		title: 'id',
 		dataIndex: 'id',
