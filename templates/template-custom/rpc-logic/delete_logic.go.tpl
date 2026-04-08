@@ -8,7 +8,6 @@ import (
 
 	"skeyevss/core/app/sev/db/db"
 	"skeyevss/core/app/sev/db/internal/svc"
-	"skeyevss/core/pkg/interceptor"
 	"skeyevss/core/app/sev/db/pkg/conv"
 	"skeyevss/core/pkg/response"
 )
@@ -37,8 +36,5 @@ func (l *{{.ServiceModuleNameSingular}}DeleteLogic) {{.ServiceModuleNameSingular
 		return nil, response.NewMakeRpcRetErr(err, 2)
 	}
 
-	return &db.Response{
-		Data:    []byte(strconv.FormatBool(true)),
-		License: l.ctx.Value(interceptor.RpcReqCtxLicenseKey).(string),
-	}, nil
+	return &db.Response{Data: []byte(strconv.FormatBool(true))}, nil
 }

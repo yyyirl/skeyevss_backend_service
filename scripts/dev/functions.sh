@@ -55,9 +55,24 @@ lowercase() {
     echo "$(echo "${1}" | tr '[:upper:]' '[:lower:]')"
 }
 
-# 首字母
-firstLetter() {
-    echo "$(echo "${1}" | cut -c 1)"
+# 首字母大写
+toPascalCase() {
+    local str="$1"
+    echo "$(echo "${str:0:1}" | tr '[:lower:]' '[:upper:]')${str:1}"
 }
 
-clear
+# 获取指定参数
+get_specific_parameter() {
+    param_name=$1
+    shift
+    while [ $# -gt 0 ]; do
+        if [ "$1" == "$param_name" ]; then
+            shift
+            echo $1
+            return 0
+        fi
+        shift
+    done
+
+    return 1
+}

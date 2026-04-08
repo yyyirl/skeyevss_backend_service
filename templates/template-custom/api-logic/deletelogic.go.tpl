@@ -7,9 +7,9 @@ import (
 
 	"skeyevss/core/app/sev/backend/internal/svc"
 	"skeyevss/core/pkg/orm"
+	"skeyevss/core/app/sev/db/pkg/conv"
 	"skeyevss/core/app/sev/db/client/{{.ServiceName}}"
 	"skeyevss/core/common/opt"
-	"skeyevss/core/pkg/functions"
 	"skeyevss/core/pkg/response"
 	"skeyevss/core/repositories/models/system-operation-logs"
 )

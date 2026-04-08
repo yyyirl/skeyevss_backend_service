@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 source ./functions.sh
 exitState "functions.sh 导入失败!"
 
@@ -10,6 +12,8 @@ export PROJECT_DIR=$(basename "$MAIN_PATH")
 # go env
 #export GOPATH=$HOME/code/golang/src
 #export GOBIN=$HOME/code/golang/bin
+
+export MODULE_NAME=$(awk '/^module / {print $2}' $MAIN_PATH/go.mod)
 
 # 后端服务代码路径
 export SERVER_PATH=$MAIN_PATH
@@ -23,7 +27,6 @@ export SERVER_FRONTEND_PATH=$MAIN_PATH/frontend
 # 仓库地址
 export SERVER_REPOSITORIES_PATH=$SERVER_PATH/core/repositories
 # 代码模板文件地址
-
 export SERVER_TEMPLATE_PATH=$SERVER_PATH/templates/template
 # 自定义模板地址 mysql
 export SERVER_MYSQL_TEMPLATE_CUSTOM_PATH=$SERVER_PATH/templates/template-custom/mysql
@@ -31,6 +34,8 @@ export SERVER_MYSQL_TEMPLATE_CUSTOM_PATH=$SERVER_PATH/templates/template-custom/
 export SERVER_ES_TEMPLATE_CUSTOM_PATH=$SERVER_PATH/templates/template-custom/es
 # 自定义模板地址 api logic
 export SERVER_API_LOGIC_TEMPLATE_CUSTOM_PATH=$SERVER_PATH/templates/template-custom/api-logic
+# 自定义模板地址 api handler
+export SERVER_API_HANDLER_TEMPLATE_CUSTOM_PATH=$SERVER_PATH/templates/template-custom/handler
 # 自定义模板地址 rpc logic
 export SERVER_RPC_LOGIC_TEMPLATE_CUSTOM_PATH=$SERVER_PATH/templates/template-custom/rpc-logic
 

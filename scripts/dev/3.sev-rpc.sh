@@ -5,6 +5,10 @@ source ./constants.sh
 
 # 模块名称
 server_name="db" # TODO 模块名
+server_name_tmp=$(get_specific_parameter "-name" "$@")
+if [ -n "$server_name_tmp" ]; then
+    server_name=$server_name_tmp
+fi
 
 if [[ ! -n "$server_name" ]]; then
     exitPrintln "项目名称不能为空"

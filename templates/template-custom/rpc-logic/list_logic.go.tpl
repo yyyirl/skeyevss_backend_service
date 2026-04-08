@@ -8,26 +8,25 @@ import (
 	"skeyevss/core/app/sev/db/db"
 	"skeyevss/core/app/sev/db/internal/svc"
 	"skeyevss/core/app/sev/db/pkg/conv"
-	"skeyevss/core/pkg/interceptor"
 	"skeyevss/core/pkg/response"
 	"skeyevss/core/repositories/models/{{.ModelName}}"
 )
 
-type {{.ServiceModuleNamePlural}}ListLogic struct {
+type {{.ServiceModuleNamePlural}}Logic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func New{{.ServiceModuleNamePlural}}ListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *{{.ServiceModuleNamePlural}}ListLogic {
-	return &{{.ServiceModuleNamePlural}}ListLogic{
+func New{{.ServiceModuleNamePlural}}Logic(ctx context.Context, svcCtx *svc.ServiceContext) *{{.ServiceModuleNamePlural}}Logic {
+	return &{{.ServiceModuleNamePlural}}Logic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *{{.ServiceModuleNamePlural}}ListLogic) {{.ServiceModuleNamePlural}}(in *db.XRequestParams) (*db.Response, error) {
+func (l *{{.ServiceModuleNamePlural}}Logic) {{.ServiceModuleNamePlural}}(in *db.XRequestParams) (*db.Response, error) {
 	params, err := conv.New(l.svcCtx.Config.Mode).ToOrmParams(in)
     if err != nil {
         return nil, response.NewMakeRpcRetErr(err, 2)
@@ -41,7 +40,7 @@ func (l *{{.ServiceModuleNamePlural}}ListLogic) {{.ServiceModuleNamePlural}}(in 
 
 	if count <= 0 {
 		return response.NewRpcResp[*db.Response]().Make(response.NewListResp[[]*{{.ModelName}}.Item]().Empty(), 3, func(data []byte) *db.Response {
-			return &db.Response{Data: data, License: l.ctx.Value(interceptor.RpcReqCtxLicenseKey).(string)}
+			return &db.Response{Data: data}
 		})
 	}
 
@@ -65,6 +64,6 @@ func (l *{{.ServiceModuleNamePlural}}ListLogic) {{.ServiceModuleNamePlural}}(in 
 		List:  records,
 		Count: count,
 	}, 3, func(data []byte) *db.Response {
-		return &db.Response{Data: data, License: l.ctx.Value(interceptor.RpcReqCtxLicenseKey).(string)}
+		return &db.Response{Data: data}
 	})
 }

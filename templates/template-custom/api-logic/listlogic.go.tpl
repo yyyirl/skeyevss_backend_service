@@ -7,8 +7,8 @@ import (
 
 	"skeyevss/core/app/sev/backend/internal/svc"
 	"skeyevss/core/pkg/orm"
+	"skeyevss/core/app/sev/db/pkg/conv"
 	"skeyevss/core/app/sev/db/client/{{.ServiceName}}"
-	"skeyevss/core/pkg/functions"
 	"skeyevss/core/pkg/response"
 	"skeyevss/core/repositories/models/{{.ModelName}}"
 )
@@ -35,7 +35,7 @@ func (l *ListLogic) List(req *orm.ReqParams) (interface{}, *response.HttpErr) {
                 return nil, err
             }
 
-			return l.svcCtx.RpcClients.{{.ServiceClient}}.{{.ServiceModuleNamePlural}}List(l.ctx, data)
+			return l.svcCtx.RpcClients.{{.ServiceClient}}.{{.ServiceModuleNamePlural}}(l.ctx, data)
 		},
 	)
 	if err != nil {

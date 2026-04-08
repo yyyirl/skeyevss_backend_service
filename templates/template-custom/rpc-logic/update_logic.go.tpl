@@ -9,7 +9,6 @@ import (
 	"skeyevss/core/app/sev/db/db"
 	"skeyevss/core/app/sev/db/internal/svc"
 	"skeyevss/core/app/sev/db/pkg/conv"
-	"skeyevss/core/pkg/interceptor"
 	"skeyevss/core/pkg/response"
 	"skeyevss/core/repositories/models/{{.ModelName}}"
 )
@@ -43,8 +42,5 @@ func (l *{{.ServiceModuleNameSingular}}UpdateLogic) {{.ServiceModuleNameSingular
         return nil, response.NewMakeRpcRetErr(err, 2)
     }
 
-    return &db.Response{
-        Data:    []byte(strconv.FormatBool(true)),
-        License: l.ctx.Value(interceptor.RpcReqCtxLicenseKey).(string),
-    }, nil
+    return &db.Response{Data: []byte(strconv.FormatBool(true))}, nil
 }

@@ -3,22 +3,18 @@
 # api生成
 source ./constants.sh
 
-# TODO
- 模块名称
+# TODO 模块名称
 server_name="backend" # TODO
+server_name_tmp=$(get_specific_parameter "-name" "$@")
+if [ -n "$server_name_tmp" ]; then
+    server_name=$server_name_tmp
+fi
+
 # 使用orm.params
 use_orm_params="1" # TODO
 api_name=${server_name}-api.api
 work_path=${SERVER_REST_PATH}/${server_name}
 yaml="${server_name}-api.yaml"
-
-# 模块名称
-#server_name="frontend" # TODO
-## 使用orm.params
-#use_orm_params="2" # TODO
-#yaml="sk-${server_name}-api.yaml"
-#api_name=sk-${server_name}-api.api
-#work_path=${SERVER_SK_REST_PATH}/${server_name}
 
 mkdir -p $work_path
 

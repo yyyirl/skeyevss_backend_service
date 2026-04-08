@@ -5,6 +5,10 @@ source ./constants.sh
 
 # 服务名称
 server_name="db" # TODO
+server_name_tmp=$(get_specific_parameter "-sev-name" "$@")
+if [ -n "$server_name_tmp" ]; then
+    server_name=$server_name_tmp
+fi
 
 # rpc service name {{.ServiceName}} TODO
 service_name="deviceservice"
@@ -18,6 +22,26 @@ model_name="cascade"
 if [[ ! -n "$server_name" ]]; then
     exitPrintln "项目名称不能为空"
     exit 1
+fi
+
+service_name_tmp=$(get_specific_parameter "-module" "$@")
+if [ -n "$service_name_tmp" ]; then
+    service_name=$(lowercase $service_name_tmp)
+fi
+
+service_module_name_singular_tmp=$(get_specific_parameter "-name" "$@")
+if [ -n "$service_module_name_singular_tmp" ]; then
+    service_module_name_singular=$(toPascalCase $service_module_name_singular_tmp)
+fi
+
+service_module_name_plural_tmp=$(get_specific_parameter "-names" "$@")
+if [ -n "$service_module_name_plural_tmp" ]; then
+    service_module_name_plural=$(toPascalCase $service_module_name_plural_tmp)
+fi
+
+model_name_tmp=$(get_specific_parameter "-model-name" "$@")
+if [ -n "$model_name_tmp" ]; then
+    model_name=$(lowercase $model_name_tmp)
 fi
 
 work_path=$SERVER_RPC_PATH/${server_name}/internal/logic/$service_name
@@ -52,3 +76,8 @@ ls -1 | while read item; do
     fi
 done
 
+$FORMATTER -rm-unused -set-alias -format "$work_path/${singular}_create_logic.go"
+$FORMATTER -rm-unused -set-alias -format "$work_path/${singular}_delete_logic.go"
+$FORMATTER -rm-unused -set-alias -format "$work_path/${singular}_update_logic.go"
+$FORMATTER -rm-unused -set-alias -format "$work_path/${plural}_logic.go"
+$FORMATTER -rm-unused -set-alias -format "$work_path/${singular}_row_logic.go"

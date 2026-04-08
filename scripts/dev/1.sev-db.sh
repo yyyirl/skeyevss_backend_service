@@ -16,11 +16,15 @@ if [[ ! -f "${sql2gorm}" ]]; then
     $GO install github.com/cascax/sql2gorm@latest
 fi
 
-
 export GOBIN=$OLD_GOBIN
 
 # TODO 模块名
-name="skSolutions"
+name="users"
+name_tmp=$(get_specific_parameter "-name" "$@")
+if [ -n "$name_tmp" ]; then
+    name=$name_tmp
+fi
+
 # TODO 主键类型
 #primary_key_type="string"
 
@@ -78,7 +82,7 @@ fi
 # 包信息
 content="package ${name}\n"
 # 导入信息
-content="${content}import (\n	\"${PROJECT_DIR}\/core\/pkg\/functions\"\n	\"${PROJECT_DIR}\/core\/pkg\/orm\"\n)\n"
+content="${content}import (\n	\"${MODULE_NAME}\/core\/pkg\/functions\"\n	\"${MODULE_NAME}\/core\/pkg\/orm\"\n)\n"
 content="${content}\nvar _ orm.Model = (*${model_name})(nil)"
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -89,7 +93,7 @@ fi
 # 公共方法
 #sed -i "" 's/}/\n	*orm.BaseModel\n}/g' $model_type_file
 # model指针名称
-model_pointer_name=$(firstLetter $name)
+model_pointer_name=$(toPascalCase $name)
 model_pointer_name=$(lowercase $model_pointer_name)
 # 结构体转map
 method_content="func (${model_pointer_name} ${model_name}) ToMap() map[string]interface{} {\n	return functions.StructToMap(${model_pointer_name}, \"json\", nil)\n}"
@@ -300,10 +304,10 @@ EOF
 fi
 
 # 格式化文件
-$FORMATTER -file-path $model_type_file -project-name hyper-sn -rm-unused
-$FORMATTER -file-path $model_columns_file -project-name hyper-sn -rm-unused
-$FORMATTER -file-path $model_convert_file -project-name hyper-sn -rm-unused
-$FORMATTER -file-path $model_db_file -project-name hyper-sn -rm-unused
+$FORMATTER -rm-unused -set-alias -format $model_type_file
+$FORMATTER -rm-unused -set-alias -format $model_columns_file
+$FORMATTER -rm-unused -set-alias -format $model_convert_file
+$FORMATTER -rm-unused -set-alias -format $model_db_file
 
 # 还原sql
 \mv $file_path_tmp $file_path
