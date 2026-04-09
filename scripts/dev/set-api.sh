@@ -6,6 +6,8 @@ api_path=$(get_specific_parameter "-path" "$@")
 model_singular_name=$(get_specific_parameter "-name" "$@")
 model_plural_name=$(get_specific_parameter "-names" "$@")
 model_name_zh=$(get_specific_parameter "-name-zh" "$@")
+api_group=$(get_specific_parameter "-api-group" "$@")
+api_group_item=$(get_specific_parameter "-api-group-item" "$@")
 
 if [ -z "$api_path" ]; then
     echo "-path 不能为空"
@@ -27,12 +29,16 @@ if [ -z "$model_name_zh" ]; then
     exit 1
 fi
 
+if [ -n "$api_group" ]; then
+    api_group="${api_group}/"
+fi
+
 # 定义要添加的内容
 content_to_add=$(cat << EOF
 
 // ${model_name_zh}
 @server (
-	group:      ${model_plural_name}
+	group:      ${api_group}${api_group_item}
 	middleware: AuthMiddleware
 )
 service backend-api {

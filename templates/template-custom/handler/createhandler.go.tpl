@@ -1,11 +1,11 @@
-package {{.ModelName}}
+package {{.PkgModuleName}}
 
 import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 
-	"skeyevss/core/app/sev/backend/internal/logic/{{.ModelName}}"
+	"skeyevss/core/app/sev/backend/internal/logic/{{.LogicDir}}"
 	"skeyevss/core/app/sev/backend/internal/svc"
 	"skeyevss/core/app/sev/backend/internal/types"
 	"skeyevss/core/common/source/permissions"

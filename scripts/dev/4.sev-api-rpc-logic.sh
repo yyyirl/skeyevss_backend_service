@@ -19,6 +19,13 @@ service_client="Device"
 # {{.LogType}} log type
 log_type="Cascade"
 
+api_group=$(get_specific_parameter "-api-group" "$@")
+api_group_item=$(get_specific_parameter "-api-group-item" "$@")
+api_group_original=$api_group
+if [ -n "$api_group" ]; then
+    api_group="${api_group}/"
+fi
+
 service_name_tmp=$(get_specific_parameter "-module" "$@")
 if [ -n "$service_name_tmp" ]; then
     service_name=$(lowercase $service_name_tmp)
@@ -50,7 +57,9 @@ if [[ ! -n "$server_name" ]]; then
     exit 1
 fi
 
-work_path=${SERVER_REST_PATH}/${server_name}/internal/logic/${service_module_name_plural}
+handler_logic_dir=${api_group}${api_group_item}
+handler_logic_module=${api_group_item}
+work_path=${SERVER_REST_PATH}/${server_name}/internal/logic/${handler_logic_dir}
 mkdir -p $work_path
 
 cd "${work_path}"
@@ -66,6 +75,7 @@ cd $work_path
 ls -1 | while read item; do
     if [ ! -d "$item" ]; then
         if [ "$(uname)" == "Darwin" ]; then
+            sed -i '' "s|{{.PkgModuleName}}|${api_group_item}|g" $item
             sed -i '' "s|{{.ModelName}}|${service_module_name}|g" $item
             sed -i '' "s|{{.ServiceModuleNameSingular}}|${service_module_name_singular}|g" $item
             sed -i '' "s|{{.ServiceModuleNamePlural}}|${service_module_name_plural}|g" $item
@@ -74,6 +84,7 @@ ls -1 | while read item; do
             sed -i '' "s|{{.ModuleName}}|${service_module_name}|g" $item
             sed -i '' "s|{{.LogType}}|${log_type}|g" $item
         else
+            sed -i "s|{{.PkgModuleName}}|${api_group_item}|g" $item
             sed -i "s|{{.ModelName}}|${service_module_name}|g" $item
             sed -i "s|{{.ServiceModuleNameSingular}}|${service_module_name_singular}|g" $item
             sed -i "s|{{.ServiceModuleNamePlural}}|${service_module_name_plural}|g" $item
@@ -91,7 +102,7 @@ $FORMATTER -rm-unused -set-alias -format "$work_path/updatelogic.go"
 $FORMATTER -rm-unused -set-alias -format "$work_path/listlogic.go"
 $FORMATTER -rm-unused -set-alias -format "$work_path/rowlogic.go"
 
-work_path=${SERVER_REST_PATH}/${server_name}/internal/handler/${service_module_name_plural}
+work_path=${SERVER_REST_PATH}/${server_name}/internal/handler/${handler_logic_dir}
 mkdir -p $work_path
 
 cd "${work_path}"
@@ -107,7 +118,9 @@ cd $work_path
 ls -1 | while read item; do
     if [ ! -d "$item" ]; then
         if [ "$(uname)" == "Darwin" ]; then
-            sed -i '' "s|{{.ModelName}}|${service_module_name}|g" $item
+            sed -i '' "s|{{.ModelName}}|${handler_logic_module}|g" $item
+            sed -i '' "s|{{.LogicDir}}|${handler_logic_dir}|g" $item
+            sed -i '' "s|{{.PkgModuleName}}|${api_group_item}|g" $item
             sed -i '' "s|{{.ServiceModuleNameSingular}}|${service_module_name_singular}|g" $item
             sed -i '' "s|{{.ServiceModuleNamePlural}}|${service_module_name_plural}|g" $item
             sed -i '' "s|{{.ServiceClient}}|${service_client}|g" $item
@@ -115,7 +128,9 @@ ls -1 | while read item; do
             sed -i '' "s|{{.ModuleName}}|${service_module_name}|g" $item
             sed -i '' "s|{{.LogType}}|${log_type}|g" $item
         else
-            sed -i "s|{{.ModelName}}|${service_module_name}|g" $item
+            sed -i "s|{{.ModelName}}|${handler_logic_module}|g" $item
+            sed -i "s|{{.LogicDir}}|${handler_logic_dir}|g" $item
+            sed -i "s|{{.PkgModuleName}}|${api_group_item}|g" $item
             sed -i "s|{{.ServiceModuleNameSingular}}|${service_module_name_singular}|g" $item
             sed -i "s|{{.ServiceModuleNamePlural}}|${service_module_name_plural}|g" $item
             sed -i "s|{{.ServiceClient}}|${service_client}|g" $item

@@ -9,6 +9,10 @@ rpc_sev_module='BackendService'
 model_name_zh='用户'
 model_name='user'
 model_names='users'
+# api分组目录
+api_group='users'
+# api handle/logic 实际落地的目录
+api_group_item='items'
 
 # 生成model
 echo -e "开始生成model ------------------ \n"
@@ -22,7 +26,7 @@ bash ./set-db-model.sh -name "$model_names" -name-zh "$model_name_zh"
 # 添加api内容
 echo
 echo -e "开始添加api ------------------ \n"
-bash ./set-api.sh -path ${MAIN_PATH}/templates/apis/backend-api.api -name $model_name -names $model_names -name-zh $model_name_zh
+bash ./set-api.sh -path ${MAIN_PATH}/templates/apis/backend-api.api -name $model_name -names $model_names -name-zh $model_name_zh -api-group $api_group -api-group-item $api_group_item
 
 # 设置api
 echo
@@ -47,7 +51,7 @@ bash ./5.sev-rpc-logic.sh -sev-name "db" -module $rpc_sev_module -name $model_na
 # 设置api logic
 echo
 echo -e "开始设置api logic ------------------ \n"
-bash ./4.sev-api-rpc-logic.sh -sev-name "db" -module $rpc_sev_module -name $model_name -names $model_names -model-name $model_names -service-client $rpc_sev_client
+bash ./4.sev-api-rpc-logic.sh -sev-name "db" -module $rpc_sev_module -name $model_name -names $model_names -model-name $model_names -service-client $rpc_sev_client -api-group $api_group -api-group-item $api_group_item
 
 # 设置日志类型
 echo
@@ -57,7 +61,7 @@ bash ./set-operation-type.sh -name $model_name -name-zh $model_name_zh
 # 设置权限
 echo
 echo -e "开始设置权限 ------------------ \n"
-output=$(bash ./set-permissions.sh -name-zh $model_name_zh -name $model_names -server-name "backend")
+output=$(bash ./set-permissions.sh -name-zh $model_name_zh -server-name "backend" -api-group $api_group -api-group-item $api_group_item)
 
 # 从输出中解析变量
 backend_permissions_id=$(echo "$output" | grep "backend_permissions_id=" | cut -d'=' -f2)

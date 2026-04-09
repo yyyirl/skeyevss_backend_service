@@ -5,18 +5,17 @@ source ./constants.sh
 permissions_backend_file="$MAIN_PATH/core/common/source/permissions/backend.go"
 permissions_frontend_file="$MAIN_PATH/core/common/source/permissions/frontend.go"
 model_name_zh=$(get_specific_parameter "-name-zh" "$@")
-module_name=$(get_specific_parameter "-name" "$@")
 server_name=$(get_specific_parameter "-server-name" "$@")
 backend_permissions_id=''
 frontend_permissions_id=''
+api_group=$(get_specific_parameter "-api-group" "$@")
+api_group_item=$(get_specific_parameter "-api-group-item" "$@")
+if [ -n "$api_group" ]; then
+    api_group="${api_group}/"
+fi
 
 if [ -z "$model_name_zh" ]; then
     echo "-name-zh 不能为空"
-    exit 1
-fi
-
-if [ -z "$module_name" ]; then
-    echo "-name 不能为空"
     exit 1
 fi
 
@@ -196,7 +195,7 @@ if [ -n "$FORMATTER" ]; then
 fi
 
 # 替换权限
-work_path="${SERVER_REST_PATH}/${server_name}/internal/handler/${module_name}"
+work_path="${SERVER_REST_PATH}/${server_name}/internal/handler/${api_group}${api_group_item}"
 replace_permission "${work_path}/listhandler.go" "P_0_${next_num_backend}_1"
 replace_permission "${work_path}/rowhandler.go" "P_0_${next_num_backend}_2"
 replace_permission "${work_path}/updatehandler.go" "P_0_${next_num_backend}_3"

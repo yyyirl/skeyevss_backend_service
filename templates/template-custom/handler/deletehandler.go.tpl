@@ -1,9 +1,9 @@
-package {{.ModelName}}
+package {{.PkgModuleName}}
 
 import (
 	"net/http"
 
-	"skeyevss/core/app/sev/backend/internal/logic/{{.ModelName}}"
+	"skeyevss/core/app/sev/backend/internal/logic/{{.LogicDir}}"
 	"skeyevss/core/app/sev/backend/internal/svc"
 	"skeyevss/core/common/source/permissions"
 	"skeyevss/core/localization"
