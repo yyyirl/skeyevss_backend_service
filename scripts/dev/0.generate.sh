@@ -11,8 +11,10 @@ model_name='user'
 model_names='users'
 # api分组目录
 api_group='users'
-# api handle/logic 实际落地的目录
+# api handle/logic 实际落地的目录 (api path复数)
 api_group_item='items'
+# (api path单数)
+api_group_item_si='item'
 
 # 生成model
 echo -e "开始生成model ------------------ \n"
@@ -26,7 +28,7 @@ bash ./set-db-model.sh -name "$model_names" -name-zh "$model_name_zh"
 # 添加api内容
 echo
 echo -e "开始添加api ------------------ \n"
-bash ./set-api.sh -path ${MAIN_PATH}/templates/apis/backend-api.api -name $model_name -names $model_names -name-zh $model_name_zh -api-group $api_group -api-group-item $api_group_item
+bash ./set-api.sh -path ${MAIN_PATH}/templates/apis/backend-api.api -name $api_group_item_si -names $api_group_item -name-zh $model_name_zh -api-group $api_group -api-group-item $api_group_item
 
 # 设置api
 echo

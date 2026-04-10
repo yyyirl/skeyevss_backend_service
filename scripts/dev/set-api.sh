@@ -29,7 +29,9 @@ if [ -z "$model_name_zh" ]; then
     exit 1
 fi
 
+api_group1="/"
 if [ -n "$api_group" ]; then
+    api_group1="/${api_group}/"
     api_group="${api_group}/"
 fi
 
@@ -44,23 +46,23 @@ content_to_add=$(cat << EOF
 service backend-api {
 	@doc "创建${model_name_zh}"
 	@handler Create
-	post /${model_plural_name} (RecordReq)
+	post ${api_group1}${model_plural_name} (RecordReq)
 
 	@doc "更新${model_name_zh}"
 	@handler Update
-	put /${model_singular_name} (TRFParams)
+	put ${api_group1}${model_singular_name} (TRFParams)
 
 	@doc "${model_name_zh}列表"
 	@handler List
-	post /${model_singular_name}/list (TRFParams)
+	post ${api_group1}${model_singular_name}/list (TRFParams)
 
 	@doc "${model_name_zh}详情"
 	@handler Row
-	get /${model_singular_name}/:id (IdQuery)
+	get ${api_group1}${model_singular_name}/:id (IdQuery)
 
 	@doc "删除"
 	@handler Delete
-	delete /${model_plural_name} (TRFParams)
+	delete ${api_group1}${model_plural_name} (TRFParams)
 }
 EOF
 )
